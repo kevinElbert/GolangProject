@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"gitlab.com/pragmaticreviews/golang-gin-poc/config"
 	"gitlab.com/pragmaticreviews/golang-gin-poc/controller"
 	"gitlab.com/pragmaticreviews/golang-gin-poc/service"
 )
@@ -14,11 +15,8 @@ var (
 func main() {
 	r := gin.Default()
 
-	// r.GET("/", func(c *gin.Context) {
-	// 	c.JSON(200, gin.H{
-	// 		"message": "Hellow World",
-	// 	})
-	// })
+	config.ConnectDatabase()
+
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(200, personalDataController.FindAll())
 	})
@@ -26,5 +24,8 @@ func main() {
 	r.POST("/post", func(ctx *gin.Context) {
 		ctx.JSON(200, personalDataController.Save(ctx))
 	})
+
+	r.GET("/id/:id", personalDataController.FindById)
+
 	r.Run(":8080")
 }
